@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>fleaMarket by puttyshell</title>
-
+    <title>Mitbbs Flea Market by PuTTYshell</title>
     <link rel="stylesheet" type="text/css" href="./stylesheets/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./stylesheets/ng-grid.min.css">
     <script src="./javascripts/jquery-2.0.3.min.js" type="text/javascript"></script>
@@ -65,7 +64,7 @@
         $scope.myData = [];
 
         var req = [];
-        for (var cnt = 20; cnt < 100; cnt += 100) {
+        for (var cnt = 20; cnt < 1000; cnt += 100) {
             req.push($http.get("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fwww.mitbbs.com%2Fbbsdoc1%2FfleaMarket_" + cnt + "_0.html%22%20and%20xpath%3D%22%2F%2Ftd%5B%40class%3D'taolun_leftright'%5D%2Ftable%2Ftr%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="));
         }
 
@@ -194,8 +193,8 @@
     }
 
     .market-inventory-grid {
-        bottom: auto;
-        height: 50%;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
     }
 
     .gridStyle {
@@ -241,13 +240,25 @@
         border-radius: 3px;
     }
 
-    .market-data-detail {
-        height: 50%;
+    .market-data-list {
         margin: 0;
-        top: auto;
+        right: auto;
+        width: 50%;
         border: none;
         box-sizing: border-box;
         -moz-box-sizing: border-box;
+    }
+
+    .market-data-detail {
+        margin: 0;
+        left: 50%;
+        border: none;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    .market-data-detail iframe {
+        align-content: center;
     }
 
     .market-data-detail-content {
@@ -260,60 +271,72 @@
 <div ng-app="fleaMarketApp"
      class="fitParent enc-app"
      data-ng-controller="fleaMarketCtrl">
-    <div class="fitParent market-toolbar">
-        <input type="search"
-               ng-model="query"
-               style="float:left; margin: 1px 5px;"
-               class="search-query sp-search-box"
-               results=0 placeholder="search ads..."/>
-    </div>
-    <div class="fitParent market-main">
-        <div class="fitParent market-inventory-grid">
-            <div class="fitParent gridStyle"
-                 ng-class="{loading:!gridLoadingDone}"
-                 ng-grid="gridOptions"
-                 ng-init="getNgGridInfo();">
-            </div>
-        </div>
-        <div class="fitParent market-data-detail"
-             ng-hide="mySelections[0].detailLink"
-             style="padding: 10px;">
-            我可以：
-            <ul>
-                <li>输入关键字来搜索广告。</li>
-                <li>在广告列表里：
-                    <ul>
-                        <li>根据不同的列排序</li>
-                        <li>分类查看，显示/隐藏列（点右边下三角图标）</li>
-                    </ul>
-                </li>
-                <li>选择一个广告：
-                    <ul>
-                        <li>查看内容</li>
-                        <li>打开mitbbs fleamarket的相应页面</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="fitParent market-data-detail"
-             ng-show="mySelections[0].detailLink"
-             style="background: #fafaf0; padding: 0 5px 5px 5px;">
-            <div>
-                <a class="btn btn-mini"
-                   href="http://www.mitbbs.com/{{mySelections[0].detailLink}}"
-                   target="_blank">mitbbs</a>
-                <button class="btn btn-mini"
-                        style="float:right;"
-                        ng-click="mySelections[0]={}"><span class="icon-help16"></span> 使用说明
-                </button>
-            </div>
 
-            <div class="fitParent market-data-detail-content">
-                <iframe class="fitParent" style="width: 100%; height: 100%;" ng-src="{{getLink()}}">
-                </iframe>
+    <div class="fitParent market-data-list">
+        <div class="fitParent market-toolbar">
+            <input type="search"
+                   ng-model="query"
+                   style="float:left; margin: 1px 5px;"
+                   class="search-query sp-search-box"
+                   results=0 placeholder="search ads..."/>
+            <span style="float: right; font: bold 20pt Arial; color: rgb(215, 215, 227);">by PuTTYshell</span>
+        </div>
+        <div class="fitParent market-main">
+            <div class="fitParent market-inventory-grid">
+                <div class="fitParent gridStyle"
+                     ng-class="{loading:!gridLoadingDone}"
+                     ng-grid="gridOptions"
+                     ng-init="getNgGridInfo();">
+                </div>
             </div>
+        </div>
+    </div>
+    <div class="fitParent market-data-detail"
+         ng-hide="mySelections[0].detailLink"
+         style="padding: 10px;">
+        我可以：
+        <ul>
+            <li>输入关键字来搜索广告。</li>
+            <li>在广告列表里：
+                <ul>
+                    <li>根据不同的列排序</li>
+                    <li>分类查看，显示/隐藏列（点右边下三角图标）</li>
+                </ul>
+            </li>
+            <li>选择一个广告：
+                <ul>
+                    <li>查看内容</li>
+                    <li>打开mitbbs fleamarket的相应页面</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="fitParent market-data-detail"
+         ng-show="mySelections[0].detailLink"
+         style="background: #fafaf0; padding: 0 5px 5px 5px;">
+        <div>
+            <a class="btn btn-mini"
+               href="http://www.mitbbs.com/{{mySelections[0].detailLink}}"
+               target="_blank">mitbbs</a>
+            <button class="btn btn-mini"
+                    style="float:right;"
+                    ng-click="mySelections[0]={}"><span class="icon-help16"></span> 使用说明
+            </button>
+        </div>
+
+        <div class="fitParent market-data-detail-content">
+            <iframe class="fitParent" style="width: 100%; height: 100%;" ng-src="{{getLink()}}">
+            </iframe>
         </div>
     </div>
 </div>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-49699999-1', 'puttyshell.github.io');
+    ga('send', 'pageview');
+</script>
 </body>
 </html>
