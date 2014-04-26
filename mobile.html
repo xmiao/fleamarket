@@ -89,10 +89,10 @@
                                         "pubTm": (td[4].span && td[4].span.content),
                                         "replyTm": (td[5].span && td[5].span.content)
                                     };
-                                    //index.add(d);
+                                    index.add(d);
                                     $scope.ads[d.detailLink] = d;
                                 });
-                        $scope.$apply();
+                        $scope.$broadcast('scroll.refreshComplete');
                     });
         }
         refresh();
@@ -110,15 +110,7 @@
             focusFirstInput: true
         });
 
-        $scope.refresh = function (a) {
-            $scope.doRefresh = function () {
-                $http.get('/new-items').success(function (newItems) {
-                    $scope.items = newItems;
-                    //Stop the ion-refresher from spinning
-                    $scope.$broadcast('scroll.refreshComplete');
-                });
-            };
-        }
+        $scope.refresh = refresh;
     });
     fm.controller('ModalCtrl', function ($scope) {
         $scope.newUser = {};
@@ -167,7 +159,7 @@
             </div>
             <div>
                 <div colspan="10">{{ad.text}}</div>
-                <div style="float:left; font: 9pt Arial; color: grey;">{{ad.author}}, {{ad.pubTm}}</div>
+                <div style="float:left; font: 9pt Arial; color: grey;"><span>{{ad.author}}</span>, {{ad.replyTm}}, {{ad.pubTm}}</div>
             </div>
         </ion-item>
     </ion-list>
