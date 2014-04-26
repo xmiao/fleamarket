@@ -111,13 +111,12 @@
             this.field('text');
             this.field('action');
             this.field('author');
-            this.ref('id');
+            this.ref('detailLink');
         });
         refresh(1000);
 
         $ionicModal.fromTemplateUrl('modal.html', function (modal) {
             $scope.modal = modal;
-            debugger;
         }, {
             animation: 'slide-in-right',
             focusFirstInput: true
@@ -130,11 +129,10 @@
             if (query) {
                 results = index.search(query);
             }
-            debugger;
             if (results && results.length > 0) {
                 $scope.displayData = [];
                 results.forEach(function (k) {
-                    $scope.myData.push($scope.dealsDb[k.ref]);
+                    $scope.displayData.push($scope.ads[k.ref]);
                 });
             } else {
                 $scope.displayData = $scope.adsAry;
