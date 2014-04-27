@@ -44,14 +44,27 @@
 
         function price(txt) {
             var rst = /(?:at|@)+[ \$]*([.0-9]+)/.exec(txt);
+            var price = 0;
             if (rst && rst[1]) {
-                return '' + Number(rst[1]);
+                price = Number(rst[1]);
+            } else {
+                rst = /(?:at|@|\$)+ *([.0-9]+)/.exec(txt);
+                if (rst && rst[1]) {
+                    price = Number(rst[1]).toFixed(2);
+                }
             }
-            rst = /(?:at|@|\$)+ *([.0-9]+)/.exec(txt);
-            if (rst && rst[1]) {
-                return '' + Number(rst[1]);
+            if (!price) {
+                return {};
             }
-            return "";
+
+            var dollar = '' + Math.floor(price);
+            var cent = '00' + Math.floor(price * 100 - Math.floor(price) * 100);
+            cent = cent.substr(cent.length - 2);
+            return {
+                value: price,
+                dollar: dollar,
+                cent: Number(cent) > 0 ? cent : ""
+            };
         }
 
         function sortByNumber(a, b) {
@@ -88,6 +101,7 @@
                                         }
                                         var cnt = td[2].strong.a.content;
                                         var id = "" + (++seqIndex);
+                                        cnt = cnt.substr(2);
                                         var d = {
                                             "id": id,
                                             "action": (action(cnt)),
@@ -149,12 +163,10 @@
             if (!$scope.modal || !$scope.modal.ad || !$scope.modal.ad.detailLink) {
                 return "http://www.mitbbs.com";
             }
-            debugger;
             return $sce.trustAsResourceUrl('http://www.mitbbs.com' + $scope.modal.ad.detailLink);
         };
 
         $scope.goBack = function () {
-            console.log('Create Contact', $scope.newUser);
             $scope.modal.hide();
         };
     });
@@ -191,24 +203,29 @@
                 style="padding: 0; margin: 0; position: relative;"
                 ng-click="modal.ad = ad; modal.show()">
             <div style="
-                    min-width: 70px; min-height: 30px;
+                    min-width: 80px; min-height: 30px;
                     margin: 0 10px 0 0;
                     float: left;
                     border: 1px solid #bfbef3;
                     border-radius: 3px;
                     padding: 5px;">
                 <span style="font:bold 15px Arial; margin: auto;">{{ad.action}}</span>
-                <span style="float: right; color: darkred;">{{ad.price}}</span>
+                <span style="float: right; color: darkred;">{{ad.price.dollar}}<span
+                        mg-show="ad.price.cent"
+                        style="vertical-align: super; font: 8pt Arial;"
+                        >{{"."+ad.price.cent}}</span></span>
             </div>
             <div style="position: absolute;
-                left: 90px; right: 30px;
+                left: 100px; right: 30px;
                 text-overflow: ellipsis;
-                overflow: hidden;">
-                {{ad.text}}<br>
+                white-space:normal;
+                float: left;
+                overflow:visible;">
+                {{ad.text}}
 
-                <div style="float:left; font: 9pt Arial; color: grey;"><span>{{ad.author}}</span>, {{ad.replyTm}},
+                <span style="float:right;font: 9pt Arial; color: grey;"><span>{{ad.author}}</span>, {{ad.replyTm}},
                     ({{ad.pubTm}})
-                </div>
+                </span>
             </div>
         </ion-item>
     </ion-list>
