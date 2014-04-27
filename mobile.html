@@ -123,10 +123,11 @@
                                         $scope.ads[d.detailLink] = d;
                                     });
                         });
-                        loading.hide();
                         $scope.$broadcast('scroll.refreshComplete');
                         $scope.adsAry = rstArr.concat($scope.adsAry);
                         $scope.displayData = $scope.adsAry;
+                        search();
+                        loading.hide();
                     });
         }
 
