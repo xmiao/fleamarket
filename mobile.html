@@ -149,6 +149,7 @@
                             }
                         ];
                     }
+                    $scope.$broadcast('scroll.scrollTop');
                     searching.hide();
                 });
                 return;
@@ -241,7 +242,7 @@
                     text-align: center;
                     padding: 5px;">
                 <div style="font:bold 15px Arial; margin: auto;">{{ad.action}}</div>
-                <span style="float: right; color: darkred;">{{ad.price.dollar}}<span
+                <span style="color: darkred;">{{ad.price.dollar}}<span
                         mg-show="ad.price.cent"
                         style="vertical-align: super; font: 8pt Arial;"
                         >{{ad.price.cent}}</span></span>
