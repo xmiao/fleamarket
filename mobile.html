@@ -25,7 +25,7 @@
 </style>
 <script>
     var fm = angular.module('ionicApp', ['ionic']);
-    fm.controller('AppCtrl', function ($scope, $http, $q, $sce, $ionicModal, $timeout, $ionicLoading) {
+    fm.controller('AppCtrl', function ($scope, $http, $q, $sce, $ionicModal, $timeout, $ionicLoading, $ionicScrollDelegate) {
         function trim(str) {
             if (!str) {
                 return str;
@@ -150,6 +150,7 @@
                         ];
                     }
                     $scope.$broadcast('scroll.scrollTop');
+                    $ionicScrollDelegate.scrollTop();
                     searching.hide();
                 });
                 return;
