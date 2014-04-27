@@ -129,15 +129,20 @@
             var results = null;
             if ($scope.query) {
                 results = index.search($scope.query);
-            }
-            if (results && results.length > 0) {
                 $scope.displayData = [];
                 results.forEach(function (k) {
                     $scope.displayData.push($scope.ads[k.ref]);
                 });
-            } else {
-                $scope.displayData = $scope.adsAry;
+                if ($scope.displayData.length == 0) {
+                    $scope.displayData = [
+                        {
+                            text: "No deal meets the search criteria."
+                        }
+                    ];
+                }
+                return;
             }
+            $scope.displayData = $scope.adsAry;
         }
 
         var invoke, done;
