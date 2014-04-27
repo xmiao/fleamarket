@@ -24,7 +24,7 @@
 </style>
 <script>
     var fm = angular.module('ionicApp', ['ionic']);
-    fm.controller('AppCtrl', function ($scope, $http, $q, $sce, $ionicModal) {
+    fm.controller('AppCtrl', function ($scope, $http, $q, $sce, $ionicModal, $timeout) {
         function trim(str) {
             if (!str) {
                 return str;
@@ -125,6 +125,31 @@
                     });
         }
 
+        function search() {
+            var results = null;
+            if ($scope.query) {
+                results = index.search($scope.query);
+            }
+            if (results && results.length > 0) {
+                $scope.displayData = [];
+                results.forEach(function (k) {
+                    $scope.displayData.push($scope.ads[k.ref]);
+                });
+            } else {
+                $scope.displayData = $scope.adsAry;
+            }
+        }
+
+        var invoke, done;
+        $scope.search = function () {
+            invoke = search;
+            done && $timeout.cancel(done);
+            done = $timeout(function () {
+                invoke && invoke();
+                invoke = null;
+            }, 1000);
+        };
+
         var index = lunr(function () {
             //this.field('title', {boost: 10})
             this.field('text');
@@ -142,21 +167,6 @@
         });
 
         $scope.refresh = refresh;
-
-        $scope.$watch("query", function (query) {
-            var results = null;
-            if (query) {
-                results = index.search(query);
-            }
-            if (results && results.length > 0) {
-                $scope.displayData = [];
-                results.forEach(function (k) {
-                    $scope.displayData.push($scope.ads[k.ref]);
-                });
-            } else {
-                $scope.displayData = $scope.adsAry;
-            }
-        });
     });
     fm.controller('ModalCtrl', function ($scope, $sce) {
         $scope.getLink = function () {
@@ -188,7 +198,7 @@
 <ion-header-bar class="bar-positive">
     <h1 class="title">MIT bbs Flea Market <span style="float: right; font: 8pt Arial;">by PuTTYshell</span></h1>
 
-    <div><input type="search" ng-model="query" placeholder="flea market search ..."
+    <div><input type="search" ng-change="search()" ng-model="query" placeholder="flea market search ..."
                 style="border-radius: 10px; height: 30px; padding:0 10px;"></div>
 </ion-header-bar>
 
