@@ -133,18 +133,24 @@
         function search() {
             var results = null;
             if ($scope.query) {
-                results = index.search($scope.query);
-                $scope.displayData = [];
-                results.forEach(function (k) {
-                    $scope.displayData.push($scope.ads[k.ref]);
+                var searching = $ionicLoading.show({
+                    content: 'Searching ...'
                 });
-                if ($scope.displayData.length == 0) {
-                    $scope.displayData = [
-                        {
-                            text: "No deal meets the search criteria."
-                        }
-                    ];
-                }
+                $timeout(function () {
+                    results = index.search($scope.query);
+                    $scope.displayData = [];
+                    results.forEach(function (k) {
+                        $scope.displayData.push($scope.ads[k.ref]);
+                    });
+                    if ($scope.displayData.length == 0) {
+                        $scope.displayData = [
+                            {
+                                text: "No deal meets the search criteria."
+                            }
+                        ];
+                    }
+                    searching.hide();
+                });
                 return;
             }
             $scope.displayData = $scope.adsAry;
